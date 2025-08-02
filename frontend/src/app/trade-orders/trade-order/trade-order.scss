@@ -1,0 +1,538 @@
+.fx-new-order-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.fx-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 16px 0;
+
+  .fx-page-title {
+    display: flex;
+    align-items: center;
+
+    .fx-page-icon {
+      font-size: 28px;
+      margin-right: 12px;
+      color: var(--fx-accent-blue);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--fx-text-primary);
+    }
+  }
+
+  .fx-page-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+}
+
+.fx-order-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 24px;
+}
+
+// Market Data Sidebar
+.fx-market-data {
+  .fx-market-card {
+    background: var(--fx-bg-secondary) !important;
+    border: 1px solid var(--fx-border);
+    padding: 0 !important;
+    position: sticky;
+    top: 24px;
+  }
+
+  .fx-market-header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid var(--fx-border);
+    background: var(--fx-bg-tertiary);
+
+    mat-icon {
+      margin-right: 12px;
+      color: var(--fx-accent-blue);
+    }
+
+    h3 {
+      margin: 0;
+      color: var(--fx-text-primary);
+      font-weight: 600;
+    }
+  }
+
+  .fx-price-list {
+    padding: 16px;
+  }
+
+  .fx-price-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 12px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    background: var(--fx-bg-primary);
+    border: 1px solid var(--fx-border);
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: var(--fx-hover);
+    }
+
+    .fx-price-info {
+      display: flex;
+      flex-direction: column;
+
+      .fx-price-pair {
+        font-weight: 600;
+        color: var(--fx-accent-blue);
+        font-size: 14px;
+      }
+
+      .fx-price-value {
+        font-size: 16px;
+        color: var(--fx-text-primary);
+        margin-top: 2px;
+      }
+    }
+
+    .fx-price-change {
+      display: flex;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 500;
+
+      mat-icon {
+        font-size: 16px;
+        margin-right: 4px;
+      }
+
+      &.positive {
+        color: var(--fx-success);
+      }
+
+      &.negative {
+        color: var(--fx-danger);
+      }
+    }
+  }
+}
+
+// Form Styles
+.fx-order-form {
+  .fx-form-card {
+    background: var(--fx-bg-secondary) !important;
+    border: 1px solid var(--fx-border);
+    padding: 0 !important;
+  }
+
+  .fx-form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--fx-border);
+    background: var(--fx-bg-tertiary);
+
+    h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--fx-text-primary);
+    }
+  }
+
+  .fx-form {
+    padding: 24px;
+  }
+
+  .fx-form-section {
+    margin-bottom: 32px;
+
+    h3 {
+      margin: 0 0 16px 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--fx-text-primary);
+    }
+  }
+}
+
+// Pair Selection
+.fx-full-width {
+  width: 100%;
+
+  .mat-mdc-select-value {
+    padding: 4px 0;
+  }
+
+  .mat-mdc-select-trigger {
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+  }
+
+  .mat-mdc-select-value-text {
+    font-weight: 500;
+    color: var(--fx-text-primary);
+  }
+}
+
+.fx-pair-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 12px 8px;
+  transition: all 0.2s ease;
+
+  .fx-pair-label {
+    flex: 1;
+    color: var(--fx-text-primary);
+    font-weight: 500;
+    font-size: 15px;
+  }
+
+  .fx-pair-price {
+    font-size: 14px;
+    color: var(--fx-text-secondary);
+    font-weight: 500;
+    margin-left: 16px;
+    background: var(--fx-bg-tertiary);
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--fx-border);
+  }
+}
+
+// Side Buttons
+.fx-side-buttons {
+  display: flex;
+  gap: 16px;
+}
+
+.fx-side-btn {
+  flex: 1;
+  padding: 16px !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 2px solid transparent !important;
+  transition: all 0.3s ease;
+  min-height: 60px;
+
+  &.fx-side-buy {
+    background: rgba(76, 175, 80, 0.1) !important;
+    color: var(--fx-success) !important;
+
+    &.selected {
+      background: var(--fx-success) !important;
+      color: white !important;
+      border-color: var(--fx-success) !important;
+    }
+  }
+
+  &.fx-side-sell {
+    background: rgba(244, 67, 54, 0.1) !important;
+    color: var(--fx-danger) !important;
+
+    &.selected {
+      background: var(--fx-danger) !important;
+      color: white !important;
+      border-color: var(--fx-danger) !important;
+    }
+  }
+
+  mat-icon {
+    font-size: 20px;
+  }
+}
+
+// Type Selection
+.fx-type-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.fx-type-card {
+  padding: 20px;
+  border: 2px solid var(--fx-border);
+  border-radius: 8px;
+  background: var(--fx-bg-primary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+
+  &:hover {
+    border-color: var(--fx-accent-blue);
+    background: var(--fx-hover);
+  }
+
+  &.selected {
+    border-color: var(--fx-accent-blue);
+    background: rgba(33, 150, 243, 0.1);
+  }
+
+  .fx-type-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 8px;
+
+    mat-icon {
+      color: var(--fx-accent-blue);
+      font-size: 24px;
+    }
+
+    .fx-type-name {
+      font-weight: 600;
+      color: var(--fx-text-primary);
+    }
+  }
+
+  .fx-type-description {
+    font-size: 12px;
+    color: var(--fx-text-secondary);
+    margin: 0;
+    line-height: 1.4;
+  }
+}
+
+// Parameters Grid
+.fx-params-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.fx-market-price-display {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  background: rgba(33, 150, 243, 0.1);
+  border: 1px solid var(--fx-accent-blue);
+  border-radius: 8px;
+  gap: 12px;
+
+  mat-icon {
+    color: var(--fx-accent-blue);
+    font-size: 24px;
+  }
+
+  .fx-market-info {
+    display: flex;
+    flex-direction: column;
+
+    .fx-market-label {
+      font-size: 12px;
+      color: var(--fx-text-secondary);
+    }
+
+    .fx-market-value {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--fx-accent-blue);
+    }
+  }
+}
+
+// Validation Info
+.fx-validation-info {
+  background: rgba(33, 150, 243, 0.05);
+  border: 1px solid rgba(33, 150, 243, 0.2);
+  border-radius: 8px;
+  padding: 16px;
+
+  .fx-validation-rule {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    .fx-info-icon {
+      color: var(--fx-accent-blue);
+      font-size: 20px;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .fx-rule-text {
+      color: var(--fx-text-primary);
+      line-height: 1.5;
+
+      strong {
+        color: var(--fx-accent-blue);
+      }
+
+      ul {
+        margin: 8px 0 0 0;
+        padding-left: 16px;
+
+        li {
+          margin-bottom: 4px;
+          color: var(--fx-text-secondary);
+
+          strong {
+            color: var(--fx-text-primary);
+          }
+        }
+      }
+    }
+  }
+}
+
+// Summary Card
+.fx-summary-card {
+  background: var(--fx-bg-primary);
+  border: 1px solid var(--fx-border);
+  border-radius: 8px;
+  padding: 20px;
+
+  .fx-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+
+    &.fx-total {
+      font-weight: 600;
+      font-size: 16px;
+      padding-top: 16px;
+    }
+
+    .fx-summary-label {
+      color: var(--fx-text-secondary);
+    }
+
+    .fx-summary-value {
+      color: var(--fx-text-primary);
+      font-weight: 500;
+
+      &.fx-side-buy {
+        color: var(--fx-success);
+      }
+
+      &.fx-side-sell {
+        color: var(--fx-danger);
+      }
+    }
+  }
+}
+
+// Form Actions
+.fx-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: 1px solid var(--fx-border);
+  margin-top: 32px;
+
+  .fx-cancel-btn {
+    color: var(--fx-text-secondary) !important;
+  }
+
+  .fx-submit-btn {
+    min-width: 160px;
+
+    mat-spinner {
+      margin-right: 8px;
+    }
+  }
+}
+
+// Material Form Field Overrides
+.mat-mdc-form-field {
+  .mat-mdc-form-field-subscript-wrapper {
+    .mat-mdc-form-field-hint-wrapper,
+    .mat-mdc-form-field-error-wrapper {
+      color: var(--fx-text-secondary) !important;
+    }
+  }
+
+  &.mat-form-field-invalid {
+    .mat-mdc-form-field-error-wrapper {
+      color: var(--fx-danger) !important;
+    }
+  }
+}
+
+// Responsive Design
+@media (max-width: 1024px) {
+  .fx-order-layout {
+    grid-template-columns: 1fr;
+
+    .fx-market-data {
+      order: 2;
+
+      .fx-market-card {
+        position: static;
+      }
+    }
+
+    .fx-order-form {
+      order: 1;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .fx-page-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+
+    .fx-page-actions {
+      justify-content: center;
+    }
+  }
+
+  .fx-type-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fx-params-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .fx-side-buttons {
+    flex-direction: column;
+  }
+
+  .fx-form-actions {
+    flex-direction: column-reverse;
+    gap: 12px;
+
+    button {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .fx-form {
+    padding: 16px;
+  }
+
+  .fx-form-section {
+    margin-bottom: 24px;
+  }
+
+  .fx-market-data .fx-price-item {
+    padding: 12px 8px;
+  }
+}

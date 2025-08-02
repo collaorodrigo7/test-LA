@@ -1,0 +1,153 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# node_modules (Node.js dependencies)
+node_modules/
+*/node_modules/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# Temporary folders
+tmp/
+temp/
+
+# Backend specific (Express + TypeScript)
+backend/dist/
+backend/build/
+backend/coverage/
+backend/.env
+backend/.env.local
+backend/.env.development.local
+backend/.env.test.local
+backend/.env.production.local
+
+# Angular specific
+frontend/dist/
+frontend/tmp/
+frontend/out-tsc/
+frontend/.angular/
+
+# Angular dependencies
+frontend/node_modules/
+
+# Angular profiling files
+frontend/chrome-profiler-events*.json
+
+# Angular System files
+frontend/.DS_Store
+frontend/Thumbs.db
+
+# Angular build outputs
+frontend/*.tgz
+frontend/*.tar.gz
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
+!.vscode/tasks.json
+*.code-workspace
+
+# IDE - WebStorm/IntelliJ
+.idea/
+*.swp
+*.swo
+
+# IDE - Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Windows
+*.stackdump
+
+# Build outputs
+build/
+dist/
+
+# Test coverage
+coverage/
+.nyc_output/
+
+# TypeScript
+*.tsbuildinfo
+
+# Database files (for development)
+*.sqlite
+*.sqlite3
+*.db
+
+# Compressed files
+*.tar.gz
+*.zip
+*.rar
+
+# Package managers lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Editor directories and files
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Jest cache
+.jest/
+
+# Karma coverage
+frontend/coverage/

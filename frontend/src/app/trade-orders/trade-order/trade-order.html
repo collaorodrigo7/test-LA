@@ -1,0 +1,226 @@
+<div class="fx-new-order-container">
+  <div class="fx-page-header">
+    <div class="fx-page-title">
+      <mat-icon class="fx-page-icon">add_circle</mat-icon>
+      <h1>Create New Order</h1>
+    </div>
+    <div class="fx-page-actions">
+      <button mat-button (click)="onCancel()" class="fx-cancel-btn">
+        <mat-icon>arrow_back</mat-icon>
+        Back to Orders
+      </button>
+    </div>
+  </div>
+
+  <div class="fx-order-layout">
+    <!-- Market Data Sidebar -->
+    <div class="fx-market-data">
+      <mat-card class="fx-market-card">
+        <div class="fx-market-header">
+          <mat-icon>trending_up</mat-icon>
+          <h3>Market Prices</h3>
+        </div>
+
+        <div class="fx-price-list">
+          <div class="fx-price-item" *ngFor="let price of marketPrices">
+            <div class="fx-price-info">
+              <span class="fx-price-pair">{{ price.pair }}</span>
+              <span class="fx-price-value">{{ price.price | number:'1.2-5' }}</span>
+            </div>
+            <div class="fx-price-change" [class.positive]="price.change > 0" [class.negative]="price.change < 0">
+              <mat-icon>{{ price.change > 0 ? 'trending_up' : 'trending_down' }}</mat-icon>
+              {{ price.change > 0 ? '+' : '' }}{{ price.change }}%
+            </div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+
+    <!-- Order Form -->
+    <div class="fx-order-form">
+      <mat-card class="fx-form-card">
+        <div class="fx-form-header">
+          <h2>Order Details</h2>
+          <button mat-icon-button (click)="resetForm()" matTooltip="Reset Form">
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </div>
+
+        <form [formGroup]="tradeOrderForm" (ngSubmit)="onSubmit()" class="fx-form">
+          <!-- Trading Pair Selection -->
+          <div class="fx-form-section">
+            <h3>Trading Pair</h3>
+            <mat-form-field appearance="outline" class="fx-full-width">
+              <mat-label>Select Pair</mat-label>
+              <mat-select formControlName="pair">
+                <mat-option *ngFor="let pair of pairs" [value]="pair.value">
+                  <div class="fx-pair-option">
+                    <span class="fx-pair-label">{{ pair.label }}</span>
+                    <span class="fx-pair-price">{{ getCurrentPrice(pair.value) | number:'1.2-5' }}</span>
+                  </div>
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <!-- Side Selection -->
+          <div class="fx-form-section">
+            <h3>Order Side</h3>
+            <div class="fx-side-buttons">
+              <button *ngFor="let side of sides"
+                      type="button"
+                      mat-raised-button
+                      [class]="'fx-side-btn fx-side-' + side.class"
+                      [class.selected]="tradeOrderForm.get('side')?.value === side.value"
+                      (click)="tradeOrderForm.patchValue({side: side.value})">
+                <mat-icon>{{ side.icon }}</mat-icon>
+                {{ side.label }}
+              </button>
+            </div>
+          </div>
+
+          <!-- Order Type Selection -->
+          <div class="fx-form-section">
+            <h3>Order Type</h3>
+            <div class="fx-type-grid">
+              <div *ngFor="let type of types"
+                   class="fx-type-card"
+                   [class.selected]="tradeOrderForm.get('type')?.value === type.value"
+                   (click)="tradeOrderForm.patchValue({type: type.value})">
+                <div class="fx-type-header">
+                  <mat-icon>{{ type.icon }}</mat-icon>
+                  <span class="fx-type-name">{{ type.label }}</span>
+                </div>
+                <p class="fx-type-description">{{ type.description }}</p>
+              </div>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <!-- Order Parameters -->
+          <div class="fx-form-section">
+            <h3>Order Parameters</h3>
+            <div class="fx-params-grid">
+              <!-- Amount -->
+              <mat-form-field appearance="outline">
+                <mat-label>Amount</mat-label>
+                <input matInput
+                       type="number"
+                       formControlName="amount"
+                       step="0.01"
+                       min="0.01"
+                       placeholder="0.00">
+                <mat-error *ngIf="tradeOrderForm.get('amount')?.hasError('required')">
+                  Amount is required
+                </mat-error>
+                <mat-error *ngIf="tradeOrderForm.get('amount')?.hasError('min')">
+                  Amount must be greater than 0.01
+                </mat-error>
+              </mat-form-field>
+
+              <!-- Price (conditional) -->
+              <mat-form-field appearance="outline" *ngIf="!isMarketOrder()">
+                <mat-label>Price</mat-label>
+                <input matInput
+                       type="number"
+                       formControlName="price"
+                       step="0.00001"
+                       min="0.00001"
+                       placeholder="0.00000">
+                <mat-hint>Current: {{ getCurrentPrice(tradeOrderForm.get('pair')?.value || 'BTCUSD') | number:'1.2-5' }}</mat-hint>
+                <mat-error>{{ getPriceErrorMessage() }}</mat-error>
+              </mat-form-field>              <!-- Market Price Display -->
+              <div class="fx-market-price-display" *ngIf="isMarketOrder()">
+                <mat-icon>flash_on</mat-icon>
+                <div class="fx-market-info">
+                  <span class="fx-market-label">Market Price</span>
+                  <span class="fx-market-value">{{ getCurrentPrice(tradeOrderForm.get('pair')?.value || 'BTCUSD') | number:'1.2-5' }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <!-- Validation Rules Info -->
+          <div class="fx-form-section" *ngIf="!isMarketOrder()">
+            <h3>Price Validation Rules</h3>
+            <div class="fx-validation-info">
+              <div class="fx-validation-rule" *ngIf="tradeOrderForm.get('type')?.value === 'limit'">
+                <mat-icon class="fx-info-icon">info</mat-icon>
+                <div class="fx-rule-text">
+                  <strong>Limit Orders:</strong>
+                  <ul>
+                    <li>Buy limit price must be <strong>lower</strong> than current market price</li>
+                    <li>Sell limit price must be <strong>higher</strong> than current market price</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="fx-validation-rule" *ngIf="tradeOrderForm.get('type')?.value === 'stop'">
+                <mat-icon class="fx-info-icon">info</mat-icon>
+                <div class="fx-rule-text">
+                  <strong>Stop Orders:</strong>
+                  <ul>
+                    <li>Buy stop price must be <strong>higher</strong> than current market price</li>
+                    <li>Sell stop price must be <strong>lower</strong> than current market price</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Order Summary -->
+          <div class="fx-form-section" *ngIf="tradeOrderForm.get('amount')?.value">
+            <h3>Order Summary</h3>
+            <div class="fx-summary-card">
+              <div class="fx-summary-row">
+                <span class="fx-summary-label">Side:</span>
+                <span class="fx-summary-value" [class]="'fx-side-' + tradeOrderForm.get('side')?.value">
+                  {{ tradeOrderForm.get('side')?.value | titlecase }}
+                </span>
+              </div>
+              <div class="fx-summary-row">
+                <span class="fx-summary-label">Type:</span>
+                <span class="fx-summary-value">{{ tradeOrderForm.get('type')?.value | titlecase }}</span>
+              </div>
+              <div class="fx-summary-row">
+                <span class="fx-summary-label">Pair:</span>
+                <span class="fx-summary-value">{{ tradeOrderForm.get('pair')?.value }}</span>
+              </div>
+              <div class="fx-summary-row">
+                <span class="fx-summary-label">Amount:</span>
+                <span class="fx-summary-value">{{ tradeOrderForm.get('amount')?.value | number:'1.2-2' }}</span>
+              </div>
+              <div class="fx-summary-row" *ngIf="!isMarketOrder()">
+                <span class="fx-summary-label">Price:</span>
+                <span class="fx-summary-value">{{ tradeOrderForm.get('price')?.value | number:'1.2-5' }}</span>
+              </div>
+              <mat-divider></mat-divider>
+              <div class="fx-summary-row fx-total">
+                <span class="fx-summary-label">Estimated Total:</span>
+                <span class="fx-summary-value">{{ getEstimatedTotal() | number:'1.2-2' }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="fx-form-actions">
+            <button mat-button type="button" (click)="onCancel()" class="fx-cancel-btn">
+              Cancel
+            </button>
+            <button mat-raised-button
+                    color="primary"
+                    type="submit"
+                    [disabled]="!tradeOrderForm.valid || isSubmitting"
+                    class="fx-submit-btn">
+              <mat-spinner diameter="20" *ngIf="isSubmitting"></mat-spinner>
+              <mat-icon *ngIf="!isSubmitting">add</mat-icon>
+              {{ isSubmitting ? 'Creating...' : 'Create Order' }}
+            </button>
+          </div>
+        </form>
+      </mat-card>
+    </div>
+  </div>
+</div>

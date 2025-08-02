@@ -1,0 +1,162 @@
+
+@use '@angular/material' as mat;
+
+// FX Replay Custom Theme
+html {
+  @include mat.theme((
+    color: (
+      primary: mat.$blue-palette,
+      tertiary: mat.$violet-palette,
+    ),
+    typography: Roboto,
+    density: 0,
+  ));
+}
+
+body {
+  color-scheme: dark;
+  background-color: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-medium);
+  margin: 0;
+}
+
+// Custom FX Replay variables
+:root {
+  --fx-bg-primary: #0D1421;
+  --fx-bg-secondary: #1A1F2E;
+  --fx-bg-tertiary: #252A3A;
+  --fx-text-primary: #FFFFFF;
+  --fx-text-secondary: #B8BCC8;
+  --fx-text-muted: #6B7280;
+  --fx-accent-blue: #2196F3;
+  --fx-accent-purple: #9C27B0;
+  --fx-success: #4CAF50;
+  --fx-danger: #F44336;
+  --fx-warning: #FF9800;
+  --fx-border: #3A4055;
+  --fx-hover: rgba(255, 255, 255, 0.05);
+  --fx-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--fx-bg-primary);
+  color: var(--fx-text-primary);
+  overflow-x: hidden;
+}
+
+body {
+  color-scheme: dark;
+}
+
+// Custom scrollbar
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--fx-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--fx-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5A6075;
+}
+
+// Material overrides for dark theme
+.mat-mdc-card {
+  background-color: var(--fx-bg-secondary) !important;
+  border: 1px solid var(--fx-border);
+  box-shadow: var(--fx-shadow);
+}
+
+.mat-mdc-table {
+  background-color: var(--fx-bg-secondary) !important;
+}
+
+.mat-mdc-header-row {
+  background-color: var(--fx-bg-tertiary) !important;
+}
+
+.mat-mdc-row:hover {
+  background-color: var(--fx-hover) !important;
+}
+
+.mat-mdc-button.mat-primary {
+  background-color: var(--fx-accent-blue) !important;
+}
+
+.mat-mdc-button.mat-accent {
+  background-color: var(--fx-accent-purple) !important;
+}
+
+// Material Select improvements
+.mat-mdc-select-panel {
+  background-color: var(--fx-bg-secondary) !important;
+  border: 1px solid var(--fx-border);
+  box-shadow: var(--fx-shadow);
+}
+
+.mat-mdc-option {
+  color: var(--fx-text-primary) !important;
+
+  &:hover {
+    background-color: var(--fx-hover) !important;
+  }
+
+  &.mat-mdc-option-active {
+    background-color: var(--fx-accent-blue) !important;
+    color: white !important;
+  }
+}
+
+.mat-mdc-form-field-outline {
+  color: var(--fx-border) !important;
+}
+
+.mat-mdc-form-field-focus-overlay {
+  background-color: transparent !important;
+}
+
+// Utility classes
+.fx-card {
+  background: var(--fx-bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--fx-border);
+  box-shadow: var(--fx-shadow);
+}
+
+.fx-text-success {
+  color: var(--fx-success) !important;
+}
+
+.fx-text-danger {
+  color: var(--fx-danger) !important;
+}
+
+.fx-text-warning {
+  color: var(--fx-warning) !important;
+}
+
+.fx-text-muted {
+  color: var(--fx-text-muted) !important;
+}
+
+// Snackbar styles
+.success-snackbar {
+  --mdc-snackbar-container-color: var(--fx-success) !important;
+  --mdc-snackbar-supporting-text-color: white !important;
+}
+
+.error-snackbar {
+  --mdc-snackbar-container-color: var(--fx-danger) !important;
+  --mdc-snackbar-supporting-text-color: white !important;
+}

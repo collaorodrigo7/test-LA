@@ -1,0 +1,243 @@
+<div class="fx-page-container">
+  <!-- Page Header -->
+  <div class="fx-page-header">
+    <div class="fx-page-title">
+      <mat-icon class="fx-page-icon">list</mat-icon>
+      <h1>Trade Orders</h1>
+    </div>
+    <div class="fx-page-actions">
+      <button mat-icon-button (click)="refreshOrders()" matTooltip="Refresh">
+        <mat-icon>refresh</mat-icon>
+      </button>
+      <button mat-raised-button color="primary" routerLink="/trades/new">
+        <mat-icon>add</mat-icon>
+        New Order
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="fx-stats-grid">
+    <mat-card class="fx-stat-card">
+      <div class="fx-stat-content">
+        <div class="fx-stat-icon open">
+          <mat-icon>schedule</mat-icon>
+        </div>
+        <div class="fx-stat-info">
+          <span class="fx-stat-label">Open Orders</span>
+          <span class="fx-stat-value">{{ getOpenOrdersCount() }}</span>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="fx-stat-card">
+      <div class="fx-stat-content">
+        <div class="fx-stat-icon executed">
+          <mat-icon>check_circle</mat-icon>
+        </div>
+        <div class="fx-stat-info">
+          <span class="fx-stat-label">Executed</span>
+          <span class="fx-stat-value">{{ getExecutedOrdersCount() }}</span>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="fx-stat-card">
+      <div class="fx-stat-content">
+        <div class="fx-stat-icon cancelled">
+          <mat-icon>cancel</mat-icon>
+        </div>
+        <div class="fx-stat-info">
+          <span class="fx-stat-label">Cancelled</span>
+          <span class="fx-stat-value">{{ getCancelledOrdersCount() }}</span>
+        </div>
+      </div>
+    </mat-card>
+
+    <mat-card class="fx-stat-card">
+      <div class="fx-stat-content">
+        <div class="fx-stat-icon total">
+          <mat-icon>analytics</mat-icon>
+        </div>
+        <div class="fx-stat-info">
+          <span class="fx-stat-label">Total Orders</span>
+          <span class="fx-stat-value">{{ pagination.totalCount }}</span>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+
+  <!-- Orders Table -->
+  <mat-card class="fx-table-card">
+    <div class="fx-table-header">
+      <h2>Orders ({{ pagination.totalCount }} total)</h2>
+      <div class="fx-table-actions">
+        <!-- Page Size Selector -->
+        <mat-form-field appearance="outline" class="fx-page-size-selector">
+          <mat-label>Per page</mat-label>
+          <mat-select [value]="pagination.pageSize" (selectionChange)="changePageSize($event.value)">
+            <mat-option *ngFor="let size of pageSizeOptions" [value]="size">
+              {{ size }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button mat-icon-button matTooltip="Filter">
+          <mat-icon>filter_list</mat-icon>
+        </button>
+        <button mat-icon-button matTooltip="Export">
+          <mat-icon>download</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="fx-table-container" *ngIf="!isLoading; else loadingTemplate">
+      <table mat-table [dataSource]="tradeOrders" class="fx-table">
+        <!-- Side Column -->
+        <ng-container matColumnDef="side">
+          <th mat-header-cell *matHeaderCellDef>Side</th>
+          <td mat-cell *matCellDef="let order">
+            <mat-chip [class]="getSideClass(order.side)">
+              <mat-icon>{{ order.side === 'buy' ? 'trending_up' : 'trending_down' }}</mat-icon>
+              {{ order.side | uppercase }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <!-- Type Column -->
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef>Type</th>
+          <td mat-cell *matCellDef="let order">
+            <div class="fx-type-cell">
+              <mat-icon class="fx-type-icon">{{ getTypeIcon(order.type) }}</mat-icon>
+              {{ order.type | titlecase }}
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Pair Column -->
+        <ng-container matColumnDef="pair">
+          <th mat-header-cell *matHeaderCellDef>Pair</th>
+          <td mat-cell *matCellDef="let order">
+            <span class="fx-pair">{{ order.pair }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Amount Column -->
+        <ng-container matColumnDef="amount">
+          <th mat-header-cell *matHeaderCellDef>Amount</th>
+          <td mat-cell *matCellDef="let order">
+            <span class="fx-amount">{{ order.amount | number:'1.2-2' }}</span>
+          </td>
+        </ng-container>
+
+        <!-- Price Column -->
+        <ng-container matColumnDef="price">
+          <th mat-header-cell *matHeaderCellDef>Price</th>
+          <td mat-cell *matCellDef="let order">
+            <span class="fx-price" *ngIf="order.price; else noPrice">
+              {{ order.price | number:'1.2-5' }}
+            </span>
+            <ng-template #noPrice>
+              <span class="fx-market-price">Market</span>
+            </ng-template>
+          </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let order">
+            <mat-chip [class]="getStatusClass(order.status)">
+              {{ order.status | titlecase }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <!-- Created At Column -->
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef>Created</th>
+          <td mat-cell *matCellDef="let order">
+            <div class="fx-date-cell">
+              <span class="fx-date">{{ order.createdAt | date:'MMM dd, yyyy' }}</span>
+              <span class="fx-time">{{ order.createdAt | date:'HH:mm:ss' }}</span>
+            </div>
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let order">
+            <div class="fx-actions">
+              <button mat-icon-button (click)="deleteOrder(order)" matTooltip="Delete Order"
+                      class="fx-delete-btn">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="fx-table-row"></tr>
+      </table>
+
+      <!-- Empty State -->
+      <div class="fx-empty-state" *ngIf="tradeOrders.length === 0">
+        <mat-icon class="fx-empty-icon">inbox</mat-icon>
+        <h3>No trade orders found</h3>
+        <p>Get started by creating your first trade order</p>
+        <button mat-raised-button color="primary" routerLink="/trades/new">
+          <mat-icon>add</mat-icon>
+          Create Order
+        </button>
+      </div>
+    </div>
+
+    <!-- Pagination Controls -->
+    <div class="fx-pagination" *ngIf="pagination.totalCount > 0">
+      <div class="fx-pagination-info">
+        <span>
+          Showing {{ (pagination.currentPage - 1) * pagination.pageSize + 1 }} -
+          {{ Math.min(pagination.currentPage * pagination.pageSize, pagination.totalCount) }}
+          of {{ pagination.totalCount }} orders
+        </span>
+      </div>
+
+      <div class="fx-pagination-controls">
+        <button mat-icon-button
+                [disabled]="!pagination.hasPreviousPage"
+                (click)="previousPage()"
+                matTooltip="Previous page">
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+
+        <div class="fx-page-numbers">
+          <button *ngFor="let page of getPageNumbers()"
+                  mat-button
+                  [class.fx-current-page]="page === pagination.currentPage"
+                  [disabled]="page === -1"
+                  (click)="page !== -1 && goToPage(page)"
+                  class="fx-page-btn">
+            {{ page === -1 ? '...' : page }}
+          </button>
+        </div>
+
+        <button mat-icon-button
+                [disabled]="!pagination.hasNextPage"
+                (click)="nextPage()"
+                matTooltip="Next page">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading Template -->
+    <ng-template #loadingTemplate>
+      <div class="fx-loading-container">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Loading trade orders...</p>
+      </div>
+    </ng-template>
+  </mat-card>
+</div>

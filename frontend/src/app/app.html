@@ -1,0 +1,35 @@
+<div class="fx-app-container">
+  <!-- Header -->
+  <mat-toolbar class="fx-toolbar">
+    <a routerLink="/trades" class="fx-logo">
+      <mat-icon class="fx-logo-icon">trending_up</mat-icon>
+      FX Replay
+    </a>
+    <span class="spacer"></span>
+    <nav class="fx-nav">
+      <a mat-button routerLink="/trades" routerLinkActive="active">
+        <mat-icon>list</mat-icon>
+        Orders
+      </a>
+      <a mat-button routerLink="/trades/new" routerLinkActive="active">
+        <mat-icon>add</mat-icon>
+        New Order
+      </a>
+    </nav>
+    <div class="fx-user-actions">
+      <button mat-icon-button>
+        <mat-icon>notifications</mat-icon>
+      </button>
+      <button mat-icon-button>
+        <mat-icon>account_circle</mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>
+
+  <!-- Main Content -->
+  <div class="fx-main-content">
+    <div class="fx-content-wrapper">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
