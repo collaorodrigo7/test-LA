@@ -33,7 +33,6 @@ export class InMemoryTradeOrderRepository implements TradeOrderReporsitory {
             deletedAt: undefined,
             id: tradeOrderData.id || uuidv4(),
         } as TradeOrder;
-        this.tradeOrders.push(newOrder);
         return newOrder;
     }
 
